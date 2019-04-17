@@ -1,0 +1,7 @@
+C:\Users\eriks\source\repos\Dartspelet\Dartspelet\bin\Debug\Dartspelet.exe.config
+C:\Users\eriks\source\repos\Dartspelet\Dartspelet\bin\Debug\Dartspelet.exe
+C:\Users\eriks\source\repos\Dartspelet\Dartspelet\bin\Debug\Dartspelet.pdb
+C:\Users\eriks\source\repos\Dartspelet\Dartspelet\obj\Debug\Dartspelet.csprojAssemblyReference.cache
+C:\Users\eriks\source\repos\Dartspelet\Dartspelet\obj\Debug\Dartspelet.csproj.CoreCompileInputs.cache
+C:\Users\eriks\source\repos\Dartspelet\Dartspelet\obj\Debug\Dartspelet.exe
+C:\Users\eriks\source\repos\Dartspelet\Dartspelet\obj\Debug\Dartspelet.pdb
