@@ -24,21 +24,15 @@ namespace Dartspelet
 
                 while (aim < 0 || aim > 20)
                 {
-                    //if (Console.ReadLine() != null) // If user enters any input, validate input and try to parse to int.
-                    //{
                         while (!int.TryParse(Console.ReadLine(), out aim)) // If parsing fails.
                         {
                             Graphics.GameHeader();
                             Console.WriteLine(" Must be a whole number between 1 and 20. Try again: ");
                         }
-                    //}
                 }
 
                 Console.CursorVisible = false;
             }
-
-
-
 
             // First handle if the user dont aim on a field. "Auto Aim" 
             if (aim < 1)
@@ -102,7 +96,6 @@ namespace Dartspelet
                         Console.WriteLine($" {player.Name} hit the adjacent field, worth {Program.dartBoard[aimIndex]} points.  ");
                         Program.Pause();
                     }
-
                 }
                 else // Player misses the aim, and also misses the adjacent point fields. Now we randomize the hit.
                 {
@@ -115,7 +108,8 @@ namespace Dartspelet
                         Graphics.GameHeader();
                         Console.WriteLine(" FAIL! ");
                         Console.WriteLine($" {player.Name} missed the board completely. :( ");
-                        Console.WriteLine($" {player.Name} is so nervous that the skill level decreases one point! Skill level is now {player.SkillLevel}.");
+                        Graphics.PrintInRed(true, $" {player.Name} is so nervous that the skill level " +
+                            $"decreases one point! Skill level is now {player.SkillLevel}.");
                         Program.Pause();
                         return 0; // Miss!
                     }
@@ -197,7 +191,9 @@ namespace Dartspelet
             }
             Console.WriteLine();
             Console.WriteLine($" That adds up to the winning score {game.WinningScore} and this game is over.");
-            Console.WriteLine(" Thank you for playing with us. Press Enter to continue to Main Menu.");
+            Console.WriteLine(" Thank you for playing with us!");
+            Console.WriteLine();
+            Graphics.PrintInGreen(true, " Press Enter to continue to Main Menu.");
             Console.ReadLine();
             MenuHandling.MainMenu();
         }

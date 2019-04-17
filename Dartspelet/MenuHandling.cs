@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Dartspelet
 {
@@ -14,7 +10,7 @@ namespace Dartspelet
         /// </summary>
         public static void MainMenu()
         {
-            string[] menuOptions = new string[] {" New Game", " Exit" };
+            string[] menuOptions = new string[] {" Play Game", " Exit" };
             int menuSelected = 0;
 
             while (true)
@@ -45,9 +41,8 @@ namespace Dartspelet
                         case 0:
                             GameMechanics.NewGame();
                             break;
-
-                            // Go to exit method.
-                        default:
+                            
+                        default: // Go to exit method.
                             ExitApplication();
                             break;
                     }

@@ -31,6 +31,7 @@ namespace Dartspelet
             // Print out the target score.
             PrintInGreen(true, $" Target score for this game is: {Program.ActiveGame.WinningScore}.");
             Console.WriteLine();
+            Console.WriteLine("----------------------------------------------------------------------------------------------------");
 
             // List all players in game with Name, Score and Skill Level.
             PrintInBlue(true, " Players:");
@@ -43,6 +44,7 @@ namespace Dartspelet
                 Graphics.PrintInBlue(true, $"{ player.SkillLevel}%");
             }
             Console.WriteLine();
+            Console.WriteLine("----------------------------------------------------------------------------------------------------");
 
             // Print out info about the active player.
             PrintInGreen(false, " Active player: ");
