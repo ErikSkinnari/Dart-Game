@@ -13,15 +13,16 @@ namespace Dartspelet
 
             int aim = 0;
 
+            // If player is human, tell player to aim at the board.
             if (player.Human == true)
             {
                 Graphics.GameHeader();
                 Console.Write($" OK {player.Name}. Time to make a throw! Your score is {player.CalculateScore() + game.CurrentTurn.GetScore()}. " +
                     $"What is your aim? (1-20) [0 to auto aim]: ");
-                Console.CursorVisible = true;
 
-                aim = -1;
+                aim = -1; // Set aim as a number not between 0 and 20.
 
+                Console.CursorVisible = true; // Visual feedback that input is asked for.
                 while (aim < 0 || aim > 20)
                 {
                         while (!int.TryParse(Console.ReadLine(), out aim)) // If parsing fails.
@@ -30,14 +31,14 @@ namespace Dartspelet
                             Console.WriteLine(" Must be a whole number between 1 and 20. Try again: ");
                         }
                 }
-
-                Console.CursorVisible = false;
+                Console.CursorVisible = false; // Hide cursor.
             }
 
-            // First handle if the user dont aim on a field. "Auto Aim" 
+            // First handle if the user dont aim on a field. "Auto Aim" triggered if aim is 0 or less.
             if (aim < 1)
             {
-                int pointDifference = game.WinningScore - (player.CalculateScore() + game.CurrentTurn.GetScore());
+                // Calculate how far player is from winning score.
+                int pointDifference = game.WinningScore - (player.CalculateScore() + game.CurrentTurn.GetScore()); 
 
                 if (pointDifference < 20) // If player is close to the winning score, set aim to the desired point field.
                 {
@@ -46,25 +47,27 @@ namespace Dartspelet
                 else aim = 20; // Else set the aim to 20. 
             }
 
-            Console.WriteLine($" {player.Name} aims for {aim} points.");
+            Console.WriteLine($" {player.Name} aims for {aim} points."); // Print out what point player aims at.
 
             int aimIndex = Array.IndexOf(Program.dartBoard, aim); // Gets the index of where in dartBoard array the value.
 
-            //Random chance = new Random(); // Used to calculate the probability that the player hits desired field on board.
             if (chance.Next(1, 101) < player.SkillLevel) // Calculates the probability that the player hits the desired point.
             {
+                // Tell player that player hit desired points.
+                Console.WriteLine($" Wow! Right on target! {aim} points added to {player.Name}'s turn! ");
+
+                // If players skill level is not maxed out - 100 is max - player has a chance to increase the skill level.
                 if (player.SkillLevel < 100)
                 {
-                    Console.WriteLine($" Wow! Right on target! {aim} points added to {player.Name}'s turn! ");
-                    if (chance.Next(1,6) == 1) // 1/5 chance of player increasing the Skill Level.
+                    if (chance.Next(1,11) == 1) // 1/10 chance of player increasing the Skill Level.
                     {
-                        player.SkillLevel++; // Skill increased (max 100)!
+                        player.SkillLevel++; // Skill increased!
                         Graphics.PrintInGreen(true, $" {player.Name} plays so good that the skill level " +
                             $"increases one point! Skill level is now {player.SkillLevel}.");
                     }
                 }
                 
-                Program.Pause();
+                Program.Pause(); // Delay so user can read info.
                 return aim;
             }
             else // Player misses the desired point. Now calculate if player hits adjacent point field.
@@ -77,49 +80,60 @@ namespace Dartspelet
 
                     if (direction == 1) // Counter clockwise
                     {
-                        if (aimIndex <= 0) // If aim is on the first index of array
+                        if (aimIndex <= 0) // If aim is on the first index of array...
                         {
-                            aimIndex = Program.dartBoard.Length - 1; // Return last index as points. (One step CCW)
+                            aimIndex = Program.dartBoard.Length - 1; // ...Return last index as points. (One step CCW)
                         }
                         else aimIndex--; // Return the point on index one less than players aim.
 
+                        // Tell player what point were hit.
                         Console.WriteLine($" {player.Name} hit the adjacent field, worth {Program.dartBoard[aimIndex]} points.  ");
-                        Program.Pause();
+                        Program.Pause(); // Delay so user can read info.
                     }
 
                     else if (direction == 2) // Clockwise
                     {
-                        if (aimIndex == Program.dartBoard.Length - 1) // If aim is on the last index of array
+                        if (aimIndex == Program.dartBoard.Length - 1) // If aim is on the last index of array...
                         {
-                            aimIndex = 0; // Return first index as points. (One step CW)
+                            aimIndex = 0; // ...Return first index as points. (One step CW)
                         }
                         else aimIndex++; // Return the point on index one less than players aim.
 
+                        // Tell player what point were hit.
                         Console.WriteLine($" {player.Name} hit the adjacent field, worth {Program.dartBoard[aimIndex]} points.  ");
-                        Program.Pause();
+                        Program.Pause(); // Delay so user can read info.
                     }
                 }
                 else // Player misses the aim, and also misses the adjacent point fields. Now we randomize the hit.
                 {
-                    int randomHit = chance.Next(1, 20);
+                    int randomHit = chance.Next(0, 20); // Randomize number between 0 and 19.
 
                     // If random hit has same value as the aimed index or one of the two adjacent, User misses the board completely
                     if (randomHit == aimIndex || randomHit == aimIndex - 1 || randomHit == aimIndex + 1)
                     {
-                        player.SkillLevel--; // The player missed the target. Skill decreased!
                         Graphics.GameHeader();
                         Console.WriteLine(" FAIL! ");
                         Console.WriteLine($" {player.Name} missed the board completely. :( ");
-                        Graphics.PrintInRed(true, $" {player.Name} is so nervous that the skill level " +
-                            $"decreases one point! Skill level is now {player.SkillLevel}.");
-                        Program.Pause();
+
+                        // If players skill level is not under 25 - player has a risk to decrease the skill level.
+                        if (player.SkillLevel > 26)
+                        {
+                            if (chance.Next(1, 6) == 1) // 1/5 chance of player decreasing the Skill Level.
+                            {
+                                player.SkillLevel--; // Skill decreased!
+                                Graphics.PrintInRed(true, $" {player.Name} is so nervous that the skill level " + 
+                                    $"decreases one point! Skill level is now {player.SkillLevel}.");
+                            }
+                        }
+                        
+                        Program.Pause(); // Delay so user can read info.
                         return 0; // Miss!
                     }
-                    else
+                    else // Player hits the field that were randomized.
                     {
                         aimIndex = randomHit;
                         Console.WriteLine($" {player.Name} hit the field worth {Program.dartBoard[aimIndex]} points.");
-                        Program.Pause();
+                        Program.Pause(); // Delay so user can read info.
                     }
                 }
             }
@@ -133,20 +147,20 @@ namespace Dartspelet
         /// <param name="game"></param>
         private static void Game(GameModel game)
         {
-            while (!game.GameEnd)
+            while (!game.GameEnd) // As long as game is not set as finished.
             {
-                foreach (var player in game.PlayerList)
+                foreach (var player in game.PlayerList) // Go through players and add turns.
                 {
-                    game.CurrentPlayer = player; // Set current player, used for displaying whos turn it is.
-
+                    game.CurrentPlayer = player; // Set current player, used for displaying whose turn it is.
 
                     Graphics.GameHeader(); // Update header so active player is right.
 
-                    Graphics.PrintInRed(true, " Next Player!");
-                    Program.Pause();
+                    Graphics.PrintInRed(true, " Next Player!"); // Tell player that turn is over and next player takes over.
+
+                    Program.Pause(); // Delay so user can read info.
                     Graphics.GameHeader(); // Update header.
 
-                    Turn t = PlayTurn(player, game);
+                    Turn t = PlayTurn(player, game); // Create new turn for current player.
 
                     // As long as this turn does not get the player OVER the winning score, add this turn to players total score.
                     if (player.CalculateScore() + t.GetScore() <= game.WinningScore)
@@ -155,9 +169,9 @@ namespace Dartspelet
                     }
 
                     // If this players score is the highest total make this player the HighScore.
-                    if (player.CalculateScore() > game.HighScore.CalculateScore())
+                    if (player.CalculateScore() > game.HighScore.CalculateScore()) // Compare current high score to players score.
                     {
-                        game.HighScore = player;
+                        game.HighScore = player; 
                     }
 
                     // If this player reaches the winning score, set player as winner.
@@ -191,7 +205,7 @@ namespace Dartspelet
             {
                 Console.WriteLine($" Round {i}");
                 turn.PrintTurn();
-                i++;
+                i++; // Add 1 to counter.
             }
             Console.WriteLine();
             Console.WriteLine($" That adds up to the winning score {game.WinningScore} and this game is over.");
@@ -210,19 +224,23 @@ namespace Dartspelet
         /// <returns></returns>
         private static Turn PlayTurn(PlayerModel player, GameModel game)
         {
-            Turn t = new Turn();
-            game.CurrentTurn = t;
-            t.ThrowOne = GameMechanics.Throw(player, game);
-            t.Skill = player.SkillLevel; // Adds the current skill level to this turn.
-            if (CheckEnd(player, game, t)) return t; // Check if user finished the game. If so, return this turn vith its current value.
-            Graphics.GameHeader();
-            t.ThrowTwo = GameMechanics.Throw(player, game);
-            if (CheckEnd(player, game, t)) return t; // Check if user finished the game. If so, return this turn vith its current value.
-            Graphics.GameHeader();
-            t.ThrowThree = GameMechanics.Throw(player, game);
-            if (CheckEnd(player, game, t)) return t; // Check if user finished the game. If so, return this turn vith its current value.
+            Turn t = new Turn(); // Create new instance of turn.
+            game.CurrentTurn = t; // Set the new turn to the current turn, so info header shows the scores.
 
-            Graphics.GameHeader();
+            t.ThrowOne = GameMechanics.Throw(player, game); // Add a throw.
+            t.Skill = player.SkillLevel; // Adds the current skill level to this turn.
+            if (CheckEnd(player, game, t)) return t; // Check if user finished the game. If so, return this turn with its current value.
+            Graphics.GameHeader(); // Update info
+
+            t.ThrowTwo = GameMechanics.Throw(player, game); // Add a throw.
+            if (CheckEnd(player, game, t)) return t; // Check if user finished the game. If so, return this turn with its current value.
+            Graphics.GameHeader(); // Update info
+
+            t.ThrowThree = GameMechanics.Throw(player, game); // Add a throw.
+            if (CheckEnd(player, game, t)) return t; // Check if user finished the game. If so, return this turn with its current value.
+            Graphics.GameHeader(); // Update info
+
+            // If this turn got player to go past the winning score, Set this turn to 0 points.
             if (player.CalculateScore() + t.GetScore() > game.WinningScore)
             {
                 t.ThrowOne = 0;
@@ -230,13 +248,11 @@ namespace Dartspelet
                 t.ThrowThree = 0;
 
                 Console.WriteLine($" Player {player.Name} got to many points. This turn does not count.");
-                Program.Pause();
+                Program.Pause(); // Delay so player can read info.
             }
-            Graphics.GameHeader();
-            //Console.WriteLine(" Turn over. Press Enter to continue:");
-            //Console.ReadLine();
+            Graphics.GameHeader(); // Update info
 
-            return t;
+            return t; // Return this turn.
         }
 
         /// <summary>
@@ -248,7 +264,8 @@ namespace Dartspelet
         /// <returns></returns>
         private static bool CheckEnd(PlayerModel player, GameModel game, Turn t)
         {
-            if (player.CalculateScore() + t.GetScore() == game.WinningScore)
+            // If total score + this turns score is exactly the winning score, finish game.
+            if (player.CalculateScore() + t.GetScore() == game.WinningScore) 
             {
                 game.Winner = player;
                 game.GameEnd = true;
@@ -263,7 +280,7 @@ namespace Dartspelet
         public static void NewGame()
         {
             GameModel g = new GameModel(MenuHandling.GameName(), MenuHandling.GameWinningScore()); // Create new game.
-            Program.ActiveGame = g;
+            Program.ActiveGame = g; // Set the game as active game. 
 
             // Time to add players to the game.
             var addPlayer = true;
@@ -277,9 +294,8 @@ namespace Dartspelet
                 if (p.Human) type = "HUMAN";
                 else type = "COMPUTER";
 
-                Graphics.Header();
-
                 // Confirmation of new player
+                Graphics.Header();
                 Graphics.PrintInBlue(true, $" Added {type} controlled player {p.Name} with a skill level of {p.SkillLevel}.");
                 Console.WriteLine();
                 Graphics.PrintInGreen(true, " Add another player? y/n"); // Do the user want to add another player?
@@ -303,7 +319,7 @@ namespace Dartspelet
             {
                 Console.WriteLine(player.ToString());
             }
-
+            Console.WriteLine();
             Graphics.PrintInGreen(true, " To start the game press enter. ");
             Console.ReadLine();
 
@@ -311,5 +327,4 @@ namespace Dartspelet
             Game(g);
         }
     }
-
 }

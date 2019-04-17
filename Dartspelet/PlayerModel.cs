@@ -36,7 +36,6 @@ namespace Dartspelet
             return total;
         }
 
-
         // Use ToString to get this Players info.
         public override string ToString()
         {

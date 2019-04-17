@@ -29,7 +29,7 @@ namespace Dartspelet
         }
 
         /// <summary>
-        /// Prints this turn in text. 
+        /// Prints a summary of this turn in text. 
         /// </summary>
         /// <returns></returns>
         public void PrintTurn()

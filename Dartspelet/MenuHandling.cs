@@ -135,7 +135,10 @@ namespace Dartspelet
             }
 
             // A little formula to set the players skill level. Max value at start is 80.
-            int playerSkill = 70 - 2*(Math.Abs(50 - i)); 
+            int playerSkill = 70 - 2*(Math.Abs(50 - i));
+
+            // And a fix if the skill level gets too low.
+            if (playerSkill < 30) playerSkill = 30;
 
             Graphics.Header();
             Graphics.PrintInGreen(true, $" Players skill level set to {playerSkill}.");
