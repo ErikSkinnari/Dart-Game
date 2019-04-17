@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Dartspelet
 {
-    class PlayerModel
+    public class PlayerModel
     {
         public string Name { get; set; }
         public int SkillLevel { get; set; }
@@ -23,19 +23,6 @@ namespace Dartspelet
             this.SkillLevel = skill;
             this.Turns = new List<Turn>();
             this.Human = human;
-        }
-
-        /// <summary>
-        /// Add a turn to player.
-        /// </summary>
-        /// <param name="one"></param>
-        /// <param name="two"></param>
-        /// <param name="three"></param>
-        public void AddTurn(int one, int two, int three)
-        {
-            Turn t = new Turn(one, two, three);
-            this.Turns.Add(t);
-            Console.WriteLine($"Turn added. Score recorded were {one}, {two} and {three}.");
         }
 
         // Add all scores together from all throws in all turns. 

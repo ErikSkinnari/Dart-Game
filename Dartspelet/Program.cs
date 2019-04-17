@@ -8,7 +8,7 @@ namespace Dartspelet
 {
     class Program
     {
-        private static readonly int delayTime = 2000; // Setting the delay time. Adjusts the game speed.  
+        private static readonly int delayTime = 100; // Setting the delay time. Adjusts the game speed.  
         // If all players is controlled by computer set to low number. 10 for simulation, maybee 1000 if you want to have
         // a chance to see what happens. If player is controlled by human the delay should be at least 2000.
 
@@ -28,6 +28,4 @@ namespace Dartspelet
             Thread.Sleep(delayTime); 
         }
     }
-
-    
 }

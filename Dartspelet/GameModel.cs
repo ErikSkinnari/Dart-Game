@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dartspelet
 {
-    class GameModel
+    public class GameModel
     {
         public string Name { get; set; } // Name of the game
         public List<PlayerModel> PlayerList { get; set; } // List of the players in the game.

@@ -2,7 +2,7 @@
 
 namespace Dartspelet
 {
-    static class GameMechanics
+    public static class GameMechanics
     {
         static Random chance = new Random(); // Used to calculate the probability that the player hits desired field on board.
 
@@ -46,6 +46,8 @@ namespace Dartspelet
                 else aim = 20; // Else set the aim to 20. 
             }
 
+            Console.WriteLine($" {player.Name} aims for {aim} points.");
+
             int aimIndex = Array.IndexOf(Program.dartBoard, aim); // Gets the index of where in dartBoard array the value.
 
             //Random chance = new Random(); // Used to calculate the probability that the player hits desired field on board.
@@ -53,15 +55,15 @@ namespace Dartspelet
             {
                 if (player.SkillLevel < 100)
                 {
+                    Console.WriteLine($" Wow! Right on target! {aim} points added to {player.Name}'s turn! ");
                     if (chance.Next(1,6) == 1) // 1/5 chance of player increasing the Skill Level.
                     {
                         player.SkillLevel++; // Skill increased (max 100)!
-                        Console.WriteLine($" {player.Name} plays so good that the skill level " +
+                        Graphics.PrintInGreen(true, $" {player.Name} plays so good that the skill level " +
                             $"increases one point! Skill level is now {player.SkillLevel}.");
                     }
-                    
                 }
-                Console.WriteLine($" Wow! Right on target! {aim} points added to {player.Name}'s turn! ");
+                
                 Program.Pause();
                 return aim;
             }
@@ -177,12 +179,14 @@ namespace Dartspelet
         {
             Graphics.GameHeader();
             Console.WriteLine();
-            Graphics.PrintInGreen(true, " The game is over!");
+            Graphics.PrintInGreen(false, " The game is over! Winner is: ");
+            Graphics.PrintInGreen(true, $"{game.Winner.Name}.");
             Console.WriteLine();
-            Graphics.PrintInGreen(true, $" Winner is {game.Winner.Name}.");
             Console.WriteLine($" {game.Winner.Name}'s turns are as follows:");
             Console.WriteLine();
-            int i = 1;
+            int i = 1; // Turn counter.
+
+            // Print out all turns of the winner.
             foreach (var turn in game.Winner.Turns)
             {
                 Console.WriteLine($" Round {i}");
@@ -191,7 +195,7 @@ namespace Dartspelet
             }
             Console.WriteLine();
             Console.WriteLine($" That adds up to the winning score {game.WinningScore} and this game is over.");
-            Console.WriteLine(" Thank you for playing with us!");
+            Console.WriteLine(" Thank you for playing!");
             Console.WriteLine();
             Graphics.PrintInGreen(true, " Press Enter to continue to Main Menu.");
             Console.ReadLine();
@@ -209,6 +213,7 @@ namespace Dartspelet
             Turn t = new Turn();
             game.CurrentTurn = t;
             t.ThrowOne = GameMechanics.Throw(player, game);
+            t.Skill = player.SkillLevel; // Adds the current skill level to this turn.
             if (CheckEnd(player, game, t)) return t; // Check if user finished the game. If so, return this turn vith its current value.
             Graphics.GameHeader();
             t.ThrowTwo = GameMechanics.Throw(player, game);
@@ -293,7 +298,7 @@ namespace Dartspelet
 
             // Print all added players.
             Graphics.Header();
-            Graphics.PrintInGreen(true, " Players added: ");
+            Graphics.PrintInGreen(true, " Players added to this game: ");
             foreach (var player in g.PlayerList)
             {
                 Console.WriteLine(player.ToString());

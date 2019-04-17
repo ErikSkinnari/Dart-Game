@@ -7,14 +7,16 @@ namespace Dartspelet
         public int ThrowOne { get; set; } 
         public int ThrowTwo { get; set; }
         public int ThrowThree { get; set; }
+        public int Skill { get; set; }
 
         public Turn() {} // Default constructor
 
-        public Turn(int one, int two, int three) // Other constructor
+        public Turn(int one, int two, int three, int skill) // Other constructor
         {
             this.ThrowOne = one;
             this.ThrowTwo = two;
             this.ThrowThree = three;
+            this.Skill = skill;
         }
 
         /// <summary>
@@ -38,7 +40,9 @@ namespace Dartspelet
             Console.SetCursorPosition(31, Console.CursorTop);
             Console.Write($" | Throw three: {ThrowThree}");
             Console.SetCursorPosition(49, Console.CursorTop);
-            Console.WriteLine($" | Total {this.GetScore()} points.");
+            Console.Write($" | Total {this.GetScore()} points.");
+            Console.SetCursorPosition(68, Console.CursorTop);
+            Console.WriteLine($" | Skill level at this round: {this.Skill}");
         }
     }
 }

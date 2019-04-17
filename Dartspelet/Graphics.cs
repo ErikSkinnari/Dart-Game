@@ -2,7 +2,7 @@
 
 namespace Dartspelet
 {
-    public static class Graphics
+    public class Graphics
     {
         /// <summary>
         /// Prints out the header on top of the window.
